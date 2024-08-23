@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.compose.compiler)
     id("com.google.devtools.ksp")
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -20,6 +21,9 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        manifestPlaceholders["appAuthRedirectScheme"] =  "com.redirectScheme.comm"
+
     }
 
     buildTypes {
@@ -79,15 +83,18 @@ dependencies {
     implementation (libs.androidx.lifecycle.runtime.ktx.v231)
 
     // Coil
-    implementation (libs.coil)
-    implementation (libs.accompanist.coil)
+    implementation(libs.coil.compose)
 
     //Dagger - Hilt
     implementation (libs.hilt.android)
+    implementation(libs.androidx.palette.ktx)
     ksp(libs.hilt.android.compiler)
-    implementation (libs.androidx.hilt.lifecycle.viewmodel)
     ksp(libs.androidx.hilt.compiler)
     implementation (libs.androidx.hilt.navigation.compose)
+
+    implementation (libs.openid.appauth)
+
+    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
