@@ -11,6 +11,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Email
@@ -21,6 +22,7 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
@@ -28,6 +30,9 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -39,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -67,6 +73,7 @@ data class BottomNavigationItem(
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -98,6 +105,15 @@ class MainActivity : ComponentActivity() {
                     mutableIntStateOf(0)
                 }
                 Scaffold(
+                    topBar = {
+                        TopAppBar(title = {
+                            Text(text = "HAKKAI",
+                                modifier = Modifier.fillMaxWidth(),
+                                textAlign = TextAlign.Center,
+                                color = Color.White
+                            )
+                        }, colors = TopAppBarDefaults.topAppBarColors(Color.DarkGray))
+                    },
                     bottomBar = {
                         NavigationBar(
                             containerColor = Color.Black,
@@ -120,7 +136,7 @@ class MainActivity : ComponentActivity() {
                                     label = {
                                         Text(text = item.title, color = Color.White)
                                     },
-                                    alwaysShowLabel = false,
+                                    alwaysShowLabel = true,
                                     icon = {
                                         Icon(
                                             imageVector = if (index == selectedItemIndex) {
@@ -135,18 +151,22 @@ class MainActivity : ComponentActivity() {
                     }
                 ) {
                     val padding = it
-
-                    NavHost(navController = navController, startDestination = "home_screen"){
-                        composable("home_screen"){
-                            HomeScreen()
-                        }
-                        composable("calendar_screen"){
-                            CalendarScreen()
-                        }
-                        composable("profile_screen"){
-                            ProfileScreen()
+                    Surface(
+                        modifier = Modifier.padding(padding),
+                    ) {
+                        NavHost(navController = navController, startDestination = "home_screen"){
+                            composable("home_screen"){
+                                HomeScreen()
+                            }
+                            composable("calendar_screen"){
+                                CalendarScreen()
+                            }
+                            composable("profile_screen"){
+                                ProfileScreen()
+                            }
                         }
                     }
+
                 }
 
 //                Column(modifier = Modifier.fillMaxSize()) {
